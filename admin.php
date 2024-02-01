@@ -1,27 +1,28 @@
+
 <?php
 
 @include 'config.php';
 
-if(isset($_POST['add_products'])){
+if(isset($_POST['add_product'])){  // Perbaikan nama formulir
    $p_nama = $_POST['p_nama'];
    $p_harga = $_POST['p_harga'];
-   $p_image = $_FILES['p_image']['image'];
-   $p_image_tmp_name = $_FILES['p_image']['tmp_nama'];
+   $p_image = $_FILES['p_image']['name'];  // Perbaikan nama variabel file
+   $p_image_tmp_name = $_FILES['p_image']['tmp_name'];
    $p_image_folder = 'uploaded_img/'.$p_image;
 
    $insert_query = mysqli_query($conn, "INSERT INTO `products`(nama, harga, image) VALUES('$p_nama', '$p_harga', '$p_image')") or die('query failed');
 
    if($insert_query){
-      move_uploaded_file($p_image_tmp_nama, $p_image_folder);
-      $message[] = 'product add succesfully';
+      move_uploaded_file($p_image_tmp_name, $p_image_folder);  // Perbaikan nama variabel file
+      $message[] = 'product add successfully';
    }else{
       $message[] = 'could not add the product';
    }
 };
 
-if(isset($_GET['hapus'])){
-   $delete_id = $_GET['hapus'];
-   $delete_query = mysqli_query($conn, "DELETE FROM `products` WHERE id = $hapus_id ") or die('query failed');
+if(isset($_GET['delete'])){  // Perbaikan nama atribut pada tombol hapus
+   $delete_id = $_GET['delete'];
+   $delete_query = mysqli_query($conn, "DELETE FROM `products` WHERE id = $delete_id ") or die('query failed');
    if($delete_query){
       header('location:admin.php');
       $message[] = 'product has been deleted';
@@ -31,28 +32,28 @@ if(isset($_GET['hapus'])){
    };
 };
 
-if(isset($_POST['update_produk'])){
+if(isset($_POST['update_product'])){  // Perbaikan nama formulir
    $update_p_id = $_POST['update_p_id'];
-   $update_p_name = $_POST['update_p_name'];
+   $update_p_name = $_POST['update_p_nama'];  // Perbaikan nama kolom
    $update_p_harga = $_POST['update_p_harga'];
-   $update_p_image = $_FILES['update_p_image']['nama'];
+   $update_p_image = $_FILES['update_p_image']['name'];  // Perbaikan nama variabel file
    $update_p_image_tmp_name = $_FILES['update_p_image']['tmp_name'];
    $update_p_image_folder = 'uploaded_img/'.$update_p_image;
 
-   $update_query = mysqli_query($conn, "UPDATE `products` SET name = '$update_p_name', harga = '$update_p_harga', image = '$update_p_image' WHERE id = '$update_p_id'");
+   $update_query = mysqli_query($conn, "UPDATE `products` SET nama = '$update_p_name', harga = '$update_p_harga', image = '$update_p_image' WHERE id = '$update_p_id'");
 
    if($update_query){
-      move_uploaded_file($update_p_image_tmp_name, $update_p_image_folder);
-      $message[] = 'produk sukses d tambahkan';
+      move_uploaded_file($update_p_image_tmp_name, $update_p_image_folder);  // Perbaikan nama variabel file
+      $message[] = 'produk sukses ditambahkan';
       header('location:admin.php');
    }else{
-      $message[] = 'produk gagal di tambahkan';
+      $message[] = 'produk gagal ditambahkan';
       header('location:admin.php');
    }
-
 }
 
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -122,7 +123,10 @@ if(isset($message)){
             <td><?php echo $row['harga']; ?>/-</td>
             <td>
                <a href="admin.php?delete=<?php echo $row['id']; ?>" class="delete-btn" onclick="return confirm('yakin mau di hapus?');"> <i class="fas fa-trash"></i> hapus </a>
-               <a href="admin.php?edit=<?php echo $row['id']; ?>" class="option-btn"> <i class="fas fa-edit"></i> edit </a>
+                  <!-- admin.php -->
+
+<a href="edit.php?edit=<?php echo $row['id']; ?>" class="option-btn"> <i class="fas fa-edit"></i> edit </a>
+
             </td>
          </tr>
 
